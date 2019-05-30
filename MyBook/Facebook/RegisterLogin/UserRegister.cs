@@ -25,9 +25,6 @@ namespace MyBook
                 return;
             }
 
-            string script = "window.onload = function() { AddImage(); };";
-            page.ClientScript.RegisterStartupScript(this.GetType(), "AddImage()", script, true);
-
             string connection = @"Data Source=LAPTOP-LDJUJ350\SQLEXPRESS;Initial Catalog=MyBook;Integrated Security=True";
             SqlConnection sqlConnection = new SqlConnection(connection);
             sqlConnection.Open();
@@ -65,12 +62,15 @@ namespace MyBook
 
             sqlConnection.Close();
 
-            ScriptManager.RegisterClientScriptBlock(
-                    page, this.GetType(),
-                    "alertMessage",
-                    "alert('Successfully Registered!')",
-                    true
-                );
+            string script = "window.onload = function() { AddImage(); };";
+            page.ClientScript.RegisterStartupScript(this.GetType(), "AddImage()", script, true);
+
+            //ScriptManager.RegisterClientScriptBlock(
+            //        page, this.GetType(),
+            //        "alertMessage",
+            //        "alert('Successfully Registered!')",
+            //        true
+            //    );
         }
     }
 }

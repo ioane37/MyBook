@@ -32,31 +32,21 @@ namespace MyBook
         protected void Button3_Click(object sender, EventArgs e)
         {
             string imageUrl = Request.Form["imageInput"];
-            ScriptManager.RegisterClientScriptBlock(
-                        this.Page, this.GetType(),
-                        "alertMessage",
-                        "alert('"+imageUrl+"')",
-                        true
-                    );
-            string connection = @"Data Source=LAPTOP-LDJUJ350\SQLEXPRESS;Initial Catalog=MyBook;Integrated Security=True";
-
-            SqlConnection sqlConnection = new SqlConnection(connection);
-
             string userName = Request.Form["username"];
 
-            SqlDataSource1.InsertCommandType = SqlDataSourceCommandType.Text;
-            SqlDataSource1.InsertCommand = $"insert into Users (ImageLink) values({imageUrl}) where UserName = '"+userName+"'";
+            string connection = @"Data Source=LAPTOP-LDJUJ350\SQLEXPRESS;Initial Catalog=MyBook;Integrated Security=True";
+            SqlConnection sqlConnection = new SqlConnection(connection);
 
-            string query = "insert into Users (ImageLink)";
-            query += " Values(@ImageLink)";
+            string query = "update Users set ImageLink = @ImageLink where UserName = @UserName";
 
-            //using (SqlCommand sqlCommand = new SqlCommand(query, sqlConnection))
-            //{
-            //    sqlConnection.Open();
-            //    sqlCommand.Parameters.AddWithValue("@ImageLink", imageUrl);
-            //    sqlCommand.ExecuteNonQuery();
-            //    sqlConnection.Close();
-            //}
+            using (SqlCommand sqlCommand = new SqlCommand(query, sqlConnection))
+            {
+                sqlConnection.Open();
+                sqlCommand.Parameters.AddWithValue("@UserName", userName);
+                sqlCommand.Parameters.AddWithValue("@ImageLink", imageUrl);
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
         }
     }
 }
